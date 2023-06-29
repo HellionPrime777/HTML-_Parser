@@ -7,9 +7,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using OfficeOpenXml;
 
-Console.WriteLine("Hello, World!");
 
-// Встановлення контексту ліцензування
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -34,16 +32,21 @@ for (int page = 1; page <= 10; page++)
         }
     }
 }
+foreach (var product in products)
+{
+    Console.WriteLine($"{product.Number} {product.Title} {product.Vendor} {product.Price}");
+}
 
-// Створення нового файлу XLS
 var excelPackage = new ExcelPackage();
 var worksheet = excelPackage.Workbook.Worksheets.Add("Products");
 
-// Запис даних у файл XLS
 worksheet.Cells.LoadFromCollection(products, true);
 
-// Збереження файлу XLS
 var fileInfo = new FileInfo("products.xlsx");
 excelPackage.SaveAs(fileInfo);
 
-Console.WriteLine($"Дані були вивантажені у файл {fileInfo.FullName}.");
+Console.WriteLine();
+Console.WriteLine("----------------------------------------------------------------------------------------");
+Console.WriteLine($"download success {fileInfo.FullName}.");
+Console.WriteLine("----------------------------------------------------------------------------------------");
+Console.WriteLine();
