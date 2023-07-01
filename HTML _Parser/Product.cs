@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HTML__Parser
 {
-    public class Product
+    public class ProductList
     {
         [JsonPropertyName("productVendor")]
         public string Vendor { get; set; }
@@ -29,5 +29,8 @@ namespace HTML__Parser
 
         [JsonPropertyName("longURL")]
         public string Url { get; set; }
+
+        //[JsonPropertyName("longURL")]
+        //public string ImageUrl { get; set; }
     }
 }

@@ -6,13 +6,14 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using OfficeOpenXml;
-
+using HTML__Parser.Models;
+using System.Globalization;
 
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 var baseUrl = "https://www.swansonvitamins.com";
-var products = new List<Product>();
+var products = new List<ProductList>();
 
 for (int page = 1; page <= 10; page++)
 {
@@ -27,7 +28,7 @@ for (int page = 1; page <= 10; page++)
         if (matches.Count > 0)
         {
             var json = matches[0].Groups[1].Value;
-            var pageProducts = JsonSerializer.Deserialize<List<Product>>(json);
+            var pageProducts = JsonSerializer.Deserialize<List<ProductList>>(json);
             products.AddRange(pageProducts);
         }
     }
@@ -50,3 +51,28 @@ Console.WriteLine("-------------------------------------------------------------
 Console.WriteLine($"download success {fileInfo.FullName}.");
 Console.WriteLine("----------------------------------------------------------------------------------------");
 Console.WriteLine();
+
+using (var db = new ProductContext())
+{
+    products.ForEach(p =>
+    {
+        var dbProduct = db.Products.FirstOrDefault(x => x.ProductName == p.Number);
+        if (dbProduct == null)
+        {
+            dbProduct = new Product();
+            dbProduct.FirstCreate = DateTime.Now;
+            db.Add(dbProduct);
+        }
+        dbProduct.Title = p.Title;
+        dbProduct.Value = p.Vendor;
+        dbProduct.Discription = p.Details;
+        dbProduct.ProductName = p.Number;
+        dbProduct.Price = Decimal.Parse(p.Price, CultureInfo.InvariantCulture);
+        dbProduct.FirstCreate = DateTime.Now;
+        dbProduct.FullUrl = p.Url;
+        //dbProduct.ImageUrl = p.ImageUrl;
+        dbProduct.Avaliable = p.Status == "In stock";
+
+    });
+    db.SaveChanges(); 
+}
