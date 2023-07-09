@@ -30,7 +30,22 @@ namespace HTML__Parser
         [JsonPropertyName("longURL")]
         public string Url { get; set; }
 
-        //[JsonPropertyName("longURL")]
-        //public string ImageUrl { get; set; }
+        public string FullUrl
+        {
+            get
+            {
+                return $"https://www.swansonvitamins.com/{Url}";
+            }
+
+        }
+
+        public string ImageUrl
+        {
+            get
+            {
+                return $"https://media.swansonvitamins.com/images/items/master/{Number}.jpg";
+            }
+
+        }
     }
 }

@@ -9,23 +9,21 @@ using System.Threading.Tasks;
 
 namespace HTML__Parser.Models
 {
-    [Index(nameof(ProductName), IsUnique = true)]
+    [Index(nameof(Code), IsUnique = true)]
     public class Product
     {
-        [Key] 
         public int Id { get; set; }
-        public string ProductName { get; set; }
+        public string Code { get; set; }
         public string Title { get; set; }
         public decimal Price { get; set; }
-        public bool Avaliable { get; set; }
-        public string Discription { get; set; }
-        public string Value { get; set; }
-
+        public bool Available { get; set; }
+        public string Description { get; set; }
+        public string Vendor { get; set; }
         public string FullUrl { get; set; }
+        public string ImageUrl { get; set; }
 
-
-        public DateTime FirstCreate { get; set; }
-        public DateTime LastUpdate { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 
 }
